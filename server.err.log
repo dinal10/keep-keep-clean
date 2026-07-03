@@ -1,0 +1,7 @@
+[Fri Jul  3 19:04:42 2026] PHP 8.2.12 Development Server (http://127.0.0.1:8091) started
+[Fri Jul  3 19:04:44 2026] 127.0.0.1:50838 Accepted
+[Fri Jul  3 19:04:44 2026] 127.0.0.1:50838 [200]: GET /index.html
+[Fri Jul  3 19:04:44 2026] 127.0.0.1:50838 Closing
+[Fri Jul  3 19:04:44 2026] 127.0.0.1:50839 Accepted
+[Fri Jul  3 19:04:44 2026] 127.0.0.1:50839 [200]: GET /admin/index.html
+[Fri Jul  3 19:04:44 2026] 127.0.0.1:50839 Closing

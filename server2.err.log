@@ -1,0 +1,7 @@
+[Fri Jul  3 19:05:24 2026] PHP 8.2.12 Development Server (http://127.0.0.1:8092) started
+[Fri Jul  3 19:05:26 2026] 127.0.0.1:56310 Accepted
+[Fri Jul  3 19:05:26 2026] 127.0.0.1:56310 [200]: GET /data/site.json
+[Fri Jul  3 19:05:26 2026] 127.0.0.1:56310 Closing
+[Fri Jul  3 19:05:27 2026] 127.0.0.1:56311 Accepted
+[Fri Jul  3 19:05:27 2026] 127.0.0.1:56311 [200]: GET /data/users.json
+[Fri Jul  3 19:05:27 2026] 127.0.0.1:56311 Closing

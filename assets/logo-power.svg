@@ -1,11 +1,11 @@
 <svg width="560" height="108" viewBox="0 0 560 108" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect width="560" height="108" rx="24" fill="#0B0908"/>
-  <path d="M33 20H80C103 20 118 32 118 51C118 66 108 76 93 80L120 88V90H88L65 82H57V90H33V20ZM57 63H77C87 63 93 58 93 50C93 42 87 38 77 38H57V63Z" fill="#FFF4E8"/>
-  <path d="M138 90V20H166V90H138Z" fill="#FF5B2E"/>
-  <path d="M184 90V20H212V70H273V90H184Z" fill="#FFF4E8"/>
-  <path d="M289 90V20H405V39H317V47H393V63H317V71H409V90H289Z" fill="#FFF4E8"/>
-  <path d="M424 90V20H452V90H424Z" fill="#FF5B2E"/>
-  <path d="M471 90V20H499L527 54V20H551V90H526L495 53V90H471Z" fill="#FFF4E8"/>
-  <path d="M140 13H189" stroke="#FF9B3D" stroke-width="4" stroke-linecap="round"/>
-  <path d="M369 13H418" stroke="#FF9B3D" stroke-width="4" stroke-linecap="round"/>
+  <rect x="24" y="24" width="62" height="60" rx="18" fill="#FF5B2E"/>
+  <path d="M45 38H63C74 38 82 45 82 54C82 62 77 68 69 71L82 77V80H66L54 74H52V80H45V38ZM52 68H62C69 68 74 63 74 56C74 49 69 45 62 45H52V68Z" fill="#FFF4E8"/>
+  <text x="105" y="50" fill="#FFF4E8" font-family="Anton, sans-serif" font-size="34" letter-spacing="2">KEEP</text>
+  <text x="105" y="82" fill="#FF9B3D" font-family="Anton, sans-serif" font-size="34" letter-spacing="2">CLEAN</text>
+  <path d="M314 31H530" stroke="#2B211A" stroke-width="2"/>
+  <path d="M314 77H530" stroke="#2B211A" stroke-width="2"/>
+  <text x="318" y="51" fill="#CFBCAD" font-family="Manrope, sans-serif" font-size="12" font-weight="700" letter-spacing="3">HYDRO VACUUM / WET VACUUM / SHOE CARE</text>
+  <text x="318" y="71" fill="#CFBCAD" font-family="Manrope, sans-serif" font-size="12" font-weight="700" letter-spacing="3">A TOUCH OF PERFECTION</text>
 </svg>

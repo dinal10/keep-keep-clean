@@ -1,5 +1,0 @@
-DirectoryIndex index.php index.html
-
-RewriteEngine On
-RewriteCond %{THE_REQUEST} \s/+(.+?)\.html[\s?] [NC]
-RewriteRule ^ %1.php [R=301,L]

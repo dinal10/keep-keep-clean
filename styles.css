@@ -687,6 +687,10 @@ textarea {
   box-shadow: 0 16px 36px rgba(18, 177, 84, 0.35);
 }
 
+.hidden {
+  display: none !important;
+}
+
 .brand-lockup {
   display: inline-flex;
   align-items: center;

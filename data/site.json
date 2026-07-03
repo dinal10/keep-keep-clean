@@ -1,25 +1,25 @@
 {
   "settings": {
-    "site_name": "Keepkeepclean",
+    "site_name": "Keep Clean",
     "tagline": "A touch of perfection",
     "phone_display": "+62 813-8219-7099",
     "phone_plain": "6281382197099",
     "hero_title": "Bikin calon customer langsung chat, bukan cuma lihat-lihat.",
-    "hero_description": "Keepkeepclean sekarang punya website dengan alur penjualan yang lebih tajam: bukti hasil, paket harga, estimator otomatis, dan direct booking ke WhatsApp.",
+    "hero_description": "Keep Clean sekarang punya website dengan alur penjualan yang lebih tajam: bukti hasil, paket harga, estimator otomatis, dan direct booking ke WhatsApp.",
     "hero_primary_label": "Cek Estimasi Harga",
     "hero_secondary_label": "Chat Admin",
-    "hero_primary_link": "layanan.php#estimasi",
+    "hero_primary_link": "layanan.html#estimasi",
     "hero_secondary_link": "",
     "area_label": "Kembangan Utara dan area searah",
     "hours_label": "Senin - Sabtu, 08.00 - 14.00",
     "contact_email": "admin@keepkeepclean.local",
     "instagram": "@keepkeepclean",
     "footer_text": "Hydro vacuum tungau, wet vacuum, disinfectant, dan shoe care dengan alur booking langsung ke WhatsApp.",
-    "meta_description": "Keepkeepclean melayani hydro vacuum tungau, wet vacuum sofa, disinfectant, fogging, dan shoe care. Booking langsung ke WhatsApp."
+    "meta_description": "Keep Clean melayani hydro vacuum tungau, wet vacuum sofa, disinfectant, fogging, dan shoe care. Booking langsung ke WhatsApp."
   },
   "branding": {
     "logo_type": "svg",
-    "logo_text": "KEEPKEEPCLEAN",
+    "logo_text": "KEEP CLEAN",
     "logo_path": "assets/logo-power.svg",
     "logo_icon_path": "assets/logo-mark.svg"
   },

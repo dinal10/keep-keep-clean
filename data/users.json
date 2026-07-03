@@ -1,6 +1,6 @@
 {
   "admin": {
     "username": "admin",
-    "password_hash": "$2y$10$0a/2u5SPGTgWp1aSnVIirOtjVGLaeF4oz3jyhG7TDC8TVgB5TcpKW"
+    "password_sha256": "69d9b2ce21e0924912f9d53ac8a30d5236505cc95760af950a7a2716c486ca80"
   }
 }
