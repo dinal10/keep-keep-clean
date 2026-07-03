@@ -1,0 +1,182 @@
+{
+  "settings": {
+    "site_name": "Keepkeepclean",
+    "tagline": "A touch of perfection",
+    "phone_display": "+62 813-8219-7099",
+    "phone_plain": "6281382197099",
+    "hero_title": "Bikin calon customer langsung chat, bukan cuma lihat-lihat.",
+    "hero_description": "Keepkeepclean sekarang punya website dengan alur penjualan yang lebih tajam: bukti hasil, paket harga, estimator otomatis, dan direct booking ke WhatsApp.",
+    "hero_primary_label": "Cek Estimasi Harga",
+    "hero_secondary_label": "Chat Admin",
+    "hero_primary_link": "layanan.php#estimasi",
+    "hero_secondary_link": "",
+    "area_label": "Kembangan Utara dan area searah",
+    "hours_label": "Senin - Sabtu, 08.00 - 14.00",
+    "contact_email": "admin@keepkeepclean.local",
+    "instagram": "@keepkeepclean",
+    "footer_text": "Hydro vacuum tungau, wet vacuum, disinfectant, dan shoe care dengan alur booking langsung ke WhatsApp.",
+    "meta_description": "Keepkeepclean melayani hydro vacuum tungau, wet vacuum sofa, disinfectant, fogging, dan shoe care. Booking langsung ke WhatsApp."
+  },
+  "branding": {
+    "logo_type": "svg",
+    "logo_text": "KEEPKEEPCLEAN",
+    "logo_path": "assets/logo-power.svg",
+    "logo_icon_path": "assets/logo-mark.svg"
+  },
+  "pricing": [
+    {
+      "id": "hydro",
+      "badge": "Hydro",
+      "title": "Hydro Vacuum Tungau",
+      "price_label": "Rp175.000",
+      "price_value": 175000,
+      "description": "Mulai per item untuk kasur, sofa, atau upholstery tertentu.",
+      "features": [
+        "Separator water filter",
+        "Debu mikro dan tungau",
+        "Cocok untuk rumah dan usaha"
+      ],
+      "featured": false
+    },
+    {
+      "id": "wet",
+      "badge": "Best seller",
+      "title": "Wet Vacuum Sofa",
+      "price_label": "Rp140.000",
+      "price_value": 140000,
+      "description": "Mulai per seat untuk sofa, bench, atau kursi kain dengan noda harian.",
+      "features": [
+        "Ekstraksi kotoran dan bau",
+        "Before/after lebih kelihatan",
+        "Bisa untuk cafe dan resto"
+      ],
+      "featured": true
+    },
+    {
+      "id": "disinfectant",
+      "badge": "Add-on",
+      "title": "Disinfectant / Fogging",
+      "price_label": "Rp250.000",
+      "price_value": 250000,
+      "description": "Mulai per kunjungan untuk treatment tambahan area pilihan.",
+      "features": [
+        "Tambahan sanitasi",
+        "Bisa digabung dengan vacuum",
+        "Cocok untuk area usaha"
+      ],
+      "featured": false
+    },
+    {
+      "id": "shoe",
+      "badge": "Shoe care",
+      "title": "Laundry Sepatu",
+      "price_label": "Rp95.000",
+      "price_value": 95000,
+      "description": "Mulai per pasang, bisa ditingkatkan untuk premium cleaning atau repair.",
+      "features": [
+        "Laundry basic",
+        "Reglue / swapsole / sewing",
+        "Konsultasi via foto"
+      ],
+      "featured": false
+    },
+    {
+      "id": "bundle-home",
+      "badge": "Bundle",
+      "title": "Paket Sofa Rumah",
+      "price_label": "Rp450.000",
+      "price_value": 450000,
+      "description": "Mulai untuk 3 seat wet vacuum plus deodorizer ringan.",
+      "features": [
+        "Lebih hemat dari satuan",
+        "Ideal untuk living room",
+        "Langsung kirim foto untuk validasi"
+      ],
+      "featured": false
+    },
+    {
+      "id": "commercial",
+      "badge": "Commercial",
+      "title": "Paket Cafe / Resto",
+      "price_label": "Custom",
+      "price_value": 0,
+      "description": "Untuk bench panjang, dining chair banyak, atau pekerjaan bertahap.",
+      "features": [
+        "Survey via chat",
+        "Penjadwalan menyesuaikan operasional",
+        "Estimasi lebih cepat via form"
+      ],
+      "featured": false
+    }
+  ],
+  "gallery": [
+    {
+      "id": "g1",
+      "title": "Sofa 6 seater",
+      "path": "assets/before-after-six-seater.jpeg",
+      "type": "image",
+      "featured": true
+    },
+    {
+      "id": "g2",
+      "title": "Sofa 2 seater",
+      "path": "assets/before-after-two-seater-orange.jpeg",
+      "type": "image",
+      "featured": false
+    },
+    {
+      "id": "g3",
+      "title": "Bench blue",
+      "path": "assets/before-after-two-seater-blue.jpeg",
+      "type": "image",
+      "featured": false
+    },
+    {
+      "id": "g4",
+      "title": "Dining chair",
+      "path": "assets/before-after-dining-chair.jpeg",
+      "type": "image",
+      "featured": false
+    },
+    {
+      "id": "g5",
+      "title": "Hydro campaign",
+      "path": "assets/hero-brand.jpeg",
+      "type": "image",
+      "featured": false
+    },
+    {
+      "id": "g6",
+      "title": "Service campaign",
+      "path": "assets/clean-poster.jpeg",
+      "type": "image",
+      "featured": false
+    }
+  ],
+  "videos": [
+    {
+      "id": "v1",
+      "title": "Work video 01",
+      "path": "assets/work-01.mp4",
+      "poster": "assets/process-poster.jpeg"
+    },
+    {
+      "id": "v2",
+      "title": "Work video 02",
+      "path": "assets/work-02.mp4",
+      "poster": "assets/clean-poster.jpeg"
+    },
+    {
+      "id": "v3",
+      "title": "Work video 03",
+      "path": "assets/work-03.mp4",
+      "poster": "assets/brand-poster.jpeg"
+    },
+    {
+      "id": "v4",
+      "title": "Work video 04",
+      "path": "assets/work-04.mp4",
+      "poster": "assets/hero-brand.jpeg"
+    }
+  ]
+}
