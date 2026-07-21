@@ -53,7 +53,19 @@ async function apiFetch(url, options = {}) {
     ...options,
   });
 
-  const data = await response.json().catch(() => ({}));
+  const text = await response.text();
+  let data = {};
+
+  try {
+    data = text ? JSON.parse(text) : {};
+  } catch {
+    if (text.includes("<?php") || text.includes("declare(strict_types=1)")) {
+      throw new Error("Admin panel backend PHP tidak berjalan. GitHub Pages tidak mendukung endpoint admin ini.");
+    }
+
+    throw new Error("Respons admin tidak valid.");
+  }
+
   if (!response.ok) {
     throw new Error(data.message || "Request gagal.");
   }
@@ -385,5 +397,6 @@ async function initAdmin() {
 }
 
 initAdmin().catch(error => {
-  alert(`Gagal memuat admin panel: ${error.message}`);
+  toggleApp(false);
+  showLoginError(error.message);
 });

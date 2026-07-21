@@ -1,4 +1,4 @@
-const SITE_DATA_URL = "includes/api/site.php";
+const SITE_DATA_URLS = ["includes/api/site.php", "data/site.json"];
 
 const state = {
   site: null,
@@ -23,11 +23,29 @@ const escapeHtml = value =>
 const waLink = (phone, message) =>
   `https://wa.me/${encodeURIComponent(phone)}?text=${encodeURIComponent(message)}`;
 
+async function loadJsonWithFallback(urls) {
+  let lastError = null;
+
+  for (const url of urls) {
+    try {
+      const response = await fetch(url, { cache: "no-store" });
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      const text = await response.text();
+      state.site = JSON.parse(text);
+      return state.site;
+    } catch (error) {
+      lastError = error;
+    }
+  }
+
+  throw new Error(`Gagal memuat data situs. ${lastError?.message || ""}`.trim());
+}
+
 async function loadSite() {
-  const response = await fetch(SITE_DATA_URL, { cache: "no-store" });
-  if (!response.ok) throw new Error("Gagal memuat data situs.");
-  state.site = await response.json();
-  return state.site;
+  return loadJsonWithFallback(SITE_DATA_URLS);
 }
 
 function renderHeader(active) {
