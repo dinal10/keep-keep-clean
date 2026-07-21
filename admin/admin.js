@@ -1,13 +1,14 @@
-const SITE_DATA_URL = "../data/site.json";
-const USERS_DATA_URL = "../data/users.json";
-const ADMIN_STORAGE_KEY = "keepkeepclean_admin_session";
-const GITHUB_STORAGE_KEY = "keepkeepclean_github_config";
+const SITE_API_URL = "../includes/api/site.php";
+const ADMIN_SESSION_API_URL = "../includes/api/admin/session.php";
+const ADMIN_LOGIN_API_URL = "../includes/api/admin/login.php";
+const ADMIN_LOGOUT_API_URL = "../includes/api/admin/logout.php";
+const ADMIN_CONTENT_API_URL = "../includes/api/admin/content.php";
+const ADMIN_PASSWORD_API_URL = "../includes/api/admin/password.php";
+const ADMIN_UPLOAD_API_URL = "../includes/api/admin/upload.php";
 
 const adminState = {
   site: null,
-  users: null,
-  session: null,
-  github: null,
+  admin: null,
 };
 
 const $ = selector => document.querySelector(selector);
@@ -21,12 +22,6 @@ const escapeHtml = value =>
     "'": "&#39;",
   }[char]));
 
-async function sha256(text) {
-  const data = new TextEncoder().encode(text);
-  const hash = await crypto.subtle.digest("SHA-256", data);
-  return Array.from(new Uint8Array(hash)).map(byte => byte.toString(16).padStart(2, "0")).join("");
-}
-
 function showMessage(type, message) {
   const success = $("[data-admin-success]");
   const error = $("[data-admin-error]");
@@ -38,35 +33,32 @@ function showMessage(type, message) {
   target.classList.remove("hidden");
 }
 
-async function loadJson(url) {
-  const response = await fetch(url, { cache: "no-store" });
-  if (!response.ok) throw new Error(`Gagal memuat ${url}`);
-  return response.json();
+function showLoginError(message) {
+  const loginError = $("[data-login-error]");
+  loginError.textContent = message;
+  loginError.classList.remove("hidden");
 }
 
-function loadSavedGithubConfig() {
-  const raw = localStorage.getItem(GITHUB_STORAGE_KEY);
-  return raw ? JSON.parse(raw) : { owner: "dinal10", repo: "keep-keep-clean", branch: "main", token: "" };
+function clearLoginError() {
+  $("[data-login-error]").classList.add("hidden");
 }
 
-function saveGithubConfig(config) {
-  localStorage.setItem(GITHUB_STORAGE_KEY, JSON.stringify(config));
-  adminState.github = config;
-}
+async function apiFetch(url, options = {}) {
+  const response = await fetch(url, {
+    credentials: "same-origin",
+    headers: {
+      ...(options.body instanceof FormData ? {} : { "Content-Type": "application/json" }),
+      ...(options.headers || {}),
+    },
+    ...options,
+  });
 
-function setSession(username) {
-  localStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify({ username, ts: Date.now() }));
-  adminState.session = { username };
-}
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(data.message || "Request gagal.");
+  }
 
-function clearSession() {
-  localStorage.removeItem(ADMIN_STORAGE_KEY);
-  adminState.session = null;
-}
-
-function getSession() {
-  const raw = localStorage.getItem(ADMIN_STORAGE_KEY);
-  return raw ? JSON.parse(raw) : null;
+  return data;
 }
 
 function toggleApp(isLoggedIn) {
@@ -95,6 +87,7 @@ function renderSettingsForm() {
     ["hero_primary_label", "Label CTA utama"],
     ["hero_secondary_label", "Label CTA kedua"],
     ["hero_primary_link", "Link CTA utama"],
+    ["hero_secondary_link", "Link CTA kedua"],
     ["area_label", "Area layanan"],
     ["hours_label", "Jam operasional"],
     ["contact_email", "Email"],
@@ -119,7 +112,7 @@ function renderSettingsForm() {
     fields.forEach(([key]) => {
       adminState.site.settings[key] = String(fd.get(key) || "").trim();
     });
-    await commitSiteData("Update website settings");
+    await saveSite("Update website settings");
   };
 }
 
@@ -149,9 +142,9 @@ function renderPricingForm() {
       price_label: String(fd.get(`price_label_${index}`) || "").trim(),
       price_value: Number(fd.get(`price_value_${index}`) || 0),
       description: String(fd.get(`description_${index}`) || "").trim(),
-      features: String(fd.get(`features_${index}`) || "").split("\n").map(itemText => itemText.trim()).filter(Boolean),
+      features: String(fd.get(`features_${index}`) || "").split("\n").map(text => text.trim()).filter(Boolean),
     }));
-    await commitSiteData("Update pricing");
+    await saveSite("Update pricing");
   };
 }
 
@@ -178,10 +171,10 @@ function renderGalleryList() {
       const fd = new FormData(form);
       adminState.site.gallery[index].title = String(fd.get("title") || "").trim();
       const file = fd.get("file");
-      if (file && file.size) {
-        adminState.site.gallery[index].path = await uploadFile(file, "uploads/gallery", "gallery");
+      if (file instanceof File && file.size) {
+        adminState.site.gallery[index].path = await uploadFile(file, "gallery");
       }
-      await commitSiteData("Update gallery item");
+      await saveSite("Update gallery item");
     };
   });
 
@@ -189,7 +182,7 @@ function renderGalleryList() {
     button.onclick = async () => {
       const index = Number(button.dataset.galleryDelete);
       adminState.site.gallery.splice(index, 1);
-      await commitSiteData("Delete gallery item");
+      await saveSite("Delete gallery item");
     };
   });
 }
@@ -219,9 +212,9 @@ function renderVideoList() {
       adminState.site.videos[index].title = String(fd.get("title") || "").trim();
       const video = fd.get("video");
       const poster = fd.get("poster");
-      if (video && video.size) adminState.site.videos[index].path = await uploadFile(video, "uploads/videos", "video");
-      if (poster && poster.size) adminState.site.videos[index].poster = await uploadFile(poster, "uploads/gallery", "poster");
-      await commitSiteData("Update video item");
+      if (video instanceof File && video.size) adminState.site.videos[index].path = await uploadFile(video, "video");
+      if (poster instanceof File && poster.size) adminState.site.videos[index].poster = await uploadFile(poster, "poster");
+      await saveSite("Update video item");
     };
   });
 
@@ -229,14 +222,14 @@ function renderVideoList() {
     button.onclick = async () => {
       const index = Number(button.dataset.videoDelete);
       adminState.site.videos.splice(index, 1);
-      await commitSiteData("Delete video item");
+      await saveSite("Delete video item");
     };
   });
 }
 
 function renderBrandingForm() {
   const form = $("[data-branding-form]");
-  form.logo_text.value = adminState.site.branding.logo_text;
+  form.logo_text.value = adminState.site.branding.logo_text || "";
   $("[data-brand-logo]").src = `../${adminState.site.branding.logo_path}`;
 
   form.onsubmit = async event => {
@@ -244,10 +237,10 @@ function renderBrandingForm() {
     adminState.site.branding.logo_text = form.logo_text.value.trim();
     const file = form.logo_file.files[0];
     if (file) {
-      adminState.site.branding.logo_path = await uploadFile(file, "uploads/branding", "logo");
+      adminState.site.branding.logo_path = await uploadFile(file, "branding");
       adminState.site.branding.logo_type = "upload";
     }
-    await commitSiteData("Update branding");
+    await saveSite("Update branding");
   };
 }
 
@@ -257,10 +250,14 @@ function bindAddForms() {
     const fd = new FormData(event.currentTarget);
     const file = fd.get("file");
     const title = String(fd.get("title") || "").trim();
-    if (!title || !file || !file.size) throw new Error("Judul dan file gambar wajib diisi.");
-    const path = await uploadFile(file, "uploads/gallery", "gallery");
+    if (!title || !(file instanceof File) || !file.size) {
+      throw new Error("Judul dan file gambar wajib diisi.");
+    }
+
+    const path = await uploadFile(file, "gallery");
     adminState.site.gallery.push({ id: `g_${Date.now()}`, title, path, type: "image", featured: false });
-    await commitSiteData("Add gallery item");
+    await saveSite("Add gallery item");
+    event.currentTarget.reset();
   };
 
   $("[data-video-add-form]").onsubmit = async event => {
@@ -269,11 +266,15 @@ function bindAddForms() {
     const title = String(fd.get("title") || "").trim();
     const video = fd.get("video");
     const poster = fd.get("poster");
-    if (!title || !video || !video.size || !poster || !poster.size) throw new Error("Judul, video, dan poster wajib diisi.");
-    const videoPath = await uploadFile(video, "uploads/videos", "video");
-    const posterPath = await uploadFile(poster, "uploads/gallery", "poster");
+    if (!title || !(video instanceof File) || !video.size || !(poster instanceof File) || !poster.size) {
+      throw new Error("Judul, video, dan poster wajib diisi.");
+    }
+
+    const videoPath = await uploadFile(video, "video");
+    const posterPath = await uploadFile(poster, "poster");
     adminState.site.videos.push({ id: `v_${Date.now()}`, title, path: videoPath, poster: posterPath });
-    await commitSiteData("Add video item");
+    await saveSite("Add video item");
+    event.currentTarget.reset();
   };
 }
 
@@ -287,104 +288,42 @@ function bindPasswordForm() {
     if (newPassword !== confirmPassword) throw new Error("Konfirmasi password baru tidak sama.");
     if (newPassword.length < 8) throw new Error("Password baru minimal 8 karakter.");
 
-    const currentHash = await sha256(currentPassword);
-    if (currentHash !== adminState.users.admin.password_sha256) throw new Error("Password lama tidak cocok.");
-
-    adminState.users.admin.password_sha256 = await sha256(newPassword);
-    await commitUsersData("Change admin password");
-    event.currentTarget.reset();
-  };
-}
-
-function populateGithubForm() {
-  const form = $("[data-github-form]");
-  const config = loadSavedGithubConfig();
-  adminState.github = config;
-  form.owner.value = config.owner || "dinal10";
-  form.repo.value = config.repo || "keep-keep-clean";
-  form.branch.value = config.branch || "main";
-  form.token.value = config.token || "";
-  form.onsubmit = event => {
-    event.preventDefault();
-    const fd = new FormData(form);
-    saveGithubConfig({
-      owner: String(fd.get("owner") || "").trim(),
-      repo: String(fd.get("repo") || "").trim(),
-      branch: String(fd.get("branch") || "").trim(),
-      token: String(fd.get("token") || "").trim(),
+    await apiFetch(ADMIN_PASSWORD_API_URL, {
+      method: "POST",
+      body: JSON.stringify({
+        current_password: currentPassword,
+        new_password: newPassword,
+        confirm_password: confirmPassword,
+      }),
     });
-    showMessage("success", "Koneksi GitHub disimpan di browser ini.");
+
+    event.currentTarget.reset();
+    showMessage("success", "Password admin berhasil diubah.");
   };
 }
 
-async function fileToBase64(file) {
-  const buffer = await file.arrayBuffer();
-  let binary = "";
-  const bytes = new Uint8Array(buffer);
-  bytes.forEach(byte => {
-    binary += String.fromCharCode(byte);
+async function uploadFile(file, type) {
+  const body = new FormData();
+  body.append("type", type);
+  body.append("file", file);
+  const data = await apiFetch(ADMIN_UPLOAD_API_URL, {
+    method: "POST",
+    body,
   });
-  return btoa(binary);
+  return data.path;
 }
 
-function githubHeaders() {
-  if (!adminState.github?.token) throw new Error("GitHub token belum diisi.");
-  return {
-    Authorization: `Bearer ${adminState.github.token}`,
-    Accept: "application/vnd.github+json",
-    "X-GitHub-Api-Version": "2022-11-28",
-  };
+async function loadSite() {
+  adminState.site = await apiFetch(SITE_API_URL);
 }
 
-async function githubGetContent(path) {
-  const { owner, repo, branch } = adminState.github;
-  const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${encodeURIComponent(branch)}`, {
-    headers: githubHeaders(),
+async function saveSite(message) {
+  const data = await apiFetch(ADMIN_CONTENT_API_URL, {
+    method: "POST",
+    body: JSON.stringify({ site: adminState.site }),
   });
-  if (response.status === 404) return null;
-  if (!response.ok) throw new Error(`Gagal membaca ${path} di GitHub.`);
-  return response.json();
-}
-
-async function githubPutContent(path, contentBase64, message) {
-  const { owner, repo, branch } = adminState.github;
-  const current = await githubGetContent(path);
-  const body = {
-    message,
-    content: contentBase64,
-    branch,
-  };
-  if (current?.sha) body.sha = current.sha;
-  const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
-    method: "PUT",
-    headers: {
-      ...githubHeaders(),
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  });
-  if (!response.ok) {
-    const data = await response.json().catch(() => ({}));
-    throw new Error(data.message || `Gagal menulis ${path} ke GitHub.`);
-  }
-}
-
-async function uploadFile(file, folder, prefix) {
-  const extension = file.name.split(".").pop().toLowerCase();
-  const name = `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${extension}`;
-  const path = `${folder}/${name}`;
-  await githubPutContent(path, await fileToBase64(file), `Upload ${path}`);
-  return path;
-}
-
-async function commitSiteData(message) {
-  await githubPutContent("data/site.json", btoa(unescape(encodeURIComponent(JSON.stringify(adminState.site, null, 2)))), message);
+  adminState.site = data.site;
   renderAll();
-  showMessage("success", `${message} berhasil.`);
-}
-
-async function commitUsersData(message) {
-  await githubPutContent("data/users.json", btoa(unescape(encodeURIComponent(JSON.stringify(adminState.users, null, 2)))), message);
   showMessage("success", `${message} berhasil.`);
 }
 
@@ -401,50 +340,48 @@ function renderAll() {
 
 async function handleLogin(event) {
   event.preventDefault();
+  clearLoginError();
   const fd = new FormData(event.currentTarget);
-  const username = String(fd.get("username") || "").trim();
-  const password = String(fd.get("password") || "");
-  const loginError = $("[data-login-error]");
-  loginError.classList.add("hidden");
 
-  const user = adminState.users[username];
-  if (!user) {
-    loginError.textContent = "Username tidak ditemukan.";
-    loginError.classList.remove("hidden");
-    return;
+  try {
+    const data = await apiFetch(ADMIN_LOGIN_API_URL, {
+      method: "POST",
+      body: JSON.stringify({
+        username: String(fd.get("username") || "").trim(),
+        password: String(fd.get("password") || ""),
+      }),
+    });
+
+    adminState.admin = data.admin;
+    await loadSite();
+    toggleApp(true);
+    renderAll();
+    event.currentTarget.reset();
+  } catch (error) {
+    showLoginError(error.message);
   }
-
-  const passwordHash = await sha256(password);
-  if (passwordHash !== user.password_sha256) {
-    loginError.textContent = "Password salah.";
-    loginError.classList.remove("hidden");
-    return;
-  }
-
-  setSession(username);
-  toggleApp(true);
-  populateGithubForm();
-  renderAll();
 }
 
 async function initAdmin() {
-  adminState.site = await loadJson(SITE_DATA_URL);
-  adminState.users = await loadJson(USERS_DATA_URL);
-  adminState.session = getSession();
-
   $("[data-login-form]").addEventListener("submit", handleLogin);
-  $("[data-logout]").addEventListener("click", () => {
-    clearSession();
+  $("[data-logout]").addEventListener("click", async () => {
+    await apiFetch(ADMIN_LOGOUT_API_URL, { method: "POST", body: "{}" });
+    adminState.admin = null;
     toggleApp(false);
+    showMessage("success", "");
   });
 
-  if (adminState.session?.username && adminState.users[adminState.session.username]) {
-    toggleApp(true);
-    populateGithubForm();
-    renderAll();
-  } else {
+  const session = await apiFetch(ADMIN_SESSION_API_URL);
+  if (!session.authenticated) {
     toggleApp(false);
+    await loadSite();
+    return;
   }
+
+  adminState.admin = session.admin;
+  await loadSite();
+  toggleApp(true);
+  renderAll();
 }
 
 initAdmin().catch(error => {

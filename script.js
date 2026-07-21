@@ -1,4 +1,4 @@
-const SITE_DATA_URL = "data/site.json";
+const SITE_DATA_URL = "includes/api/site.php";
 
 const state = {
   site: null,
@@ -110,7 +110,7 @@ function renderHome(root) {
     <section class="proof-strip" data-reveal>
       <p>Visual real job, bukan stok foto.</p>
       <p>Setiap section diarahkan ke WhatsApp untuk conversion.</p>
-      <p>Harga dan galeri bisa diubah sendiri dari admin panel GitHub Pages.</p>
+      <p>Harga dan galeri bisa diubah sendiri dari admin panel berbasis database.</p>
     </section>
     <section class="section">
       <div class="section-heading" data-reveal>
@@ -121,7 +121,7 @@ function renderHome(root) {
       <div class="feature-grid">
         <article class="feature-card" data-reveal><span class="feature-tag">01</span><h3>Paket harga jelas</h3><p>Customer tidak harus menebak-nebak kisaran biaya sebelum chat.</p></article>
         <article class="feature-card" data-reveal><span class="feature-tag">02</span><h3>Estimator ke WhatsApp</h3><p>Form langsung menyusun detail order agar admin lebih cepat closing.</p></article>
-        <article class="feature-card" data-reveal><span class="feature-tag">03</span><h3>Admin panel berbasis GitHub</h3><p>Konten disimpan di repo dan bisa dikelola langsung dari browser.</p></article>
+        <article class="feature-card" data-reveal><span class="feature-tag">03</span><h3>Admin panel berbasis database</h3><p>Konten disimpan di MySQL dan bisa dikelola langsung dari browser.</p></article>
       </div>
     </section>
     <section class="section">
@@ -227,7 +227,7 @@ function renderGaleri(root) {
       <div class="gallery-copy" data-reveal>
         <p class="eyebrow">Galeri real job</p>
         <h1 class="page-title">Hasil kerja yang bisa langsung dipakai untuk bangun trust.</h1>
-        <p class="page-subtitle">Gambar dan video halaman ini dibaca dari JSON dan bisa diperbarui dari panel admin GitHub Pages.</p>
+        <p class="page-subtitle">Gambar dan video halaman ini dibaca dari database dan bisa diperbarui dari panel admin.</p>
       </div>
       <div class="hero-card" data-reveal><img src="assets/process-poster.jpeg" alt="Poster proses kerja Keep Clean."></div>
     </section>
